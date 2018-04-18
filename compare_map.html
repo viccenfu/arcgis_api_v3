@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>Simple Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/css/esri.css">
+    <style>
+      html, body, #map {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.21/"></script>
+    <script>
+      var map;
+	  var CapaDinamica;
+
+      require(["esri/map", "esri/layers/layer",  "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/WMTSLayer", "esri/dijit/LayerSwipe", "dojo/domReady!"], function(Map, layer, ArcGISDynamicMapServiceLayer, WMTSLayer, LayerSwipe) {
+        
+		map = new Map("map", {
+          basemap: "topo",  //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+          center: [-0.5, 39.5], // longitude, latitude
+          zoom: 8
+        });
+		
+		CapaDinamica = new ArcGISDynamicMapServiceLayer("http://carto.icv.gva.es/arcgis/rest/services/tm_infraestructuras/serie_tematica/MapServer/" ,{id:"CapaDinamica", visible:true});
+				//var CapaOverview = new ArcGISTiledMapServiceLayer("http://carto.cma.gva.es/arcgis/rest/services/overview/MapServer",{id:"Overview", visible:true});
+				//MAPA BASE DE ESRI (TOPO)
+				//var CapaOverview = new ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer",{id:"Overview", visible:true});
+				CapaDinamica.setVisibleLayers([8,9,29])
+				map.addLayers([CapaDinamica]);
+		
+		var layerSwipe = new LayerSwipe({
+		  type: "vertical",
+		  top: 250,
+		  map: map,
+		  layers: [CapaDinamica] // [ CapaDinamica ]
+		}, "swipeDiv");
+		layerSwipe.startup();
+		
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="map">
+		<div id="swipeDiv"></div>
+	</div>
+  </body>
+</html>
